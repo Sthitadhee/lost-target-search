@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/css" rel="stylesheet" href="../static/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='./style.css') }}">
+    <title>Lost Target Search UAV Flight Simulation</title>
+</head>
+
+<body class="container">
+    <div>
+        <h2 class="p-3">Lost Target Search UAV Flight Simulation</h2>
+        <div class="row mt-5">
+            <div class="col-sm">
+                <!-- <canvas id="simulationCanvas"></canvas> -->
+            </div>
+            <div class="col-sm">
+                hello
+            </div>
+        </div>
+    </div>
+    <script src="{{url_for('static', filename='simulation.js')}}" type="module"></script>
+</body>
+
+</html>
