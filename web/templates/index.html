@@ -5,24 +5,30 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link type="text/css" rel="stylesheet" href="../static/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='./style.css') }}">
+    <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Lost Target Search UAV Flight Simulation</title>
 </head>
 
-<body class="container">
+<body>
     <div>
-        <h2 class="p-3">Lost Target Search UAV Flight Simulation</h2>
-        <div class="row mt-5">
-            <div class="col-sm">
-                <!-- <canvas id="simulationCanvas"></canvas> -->
+        <nav class="navbar navbar-light bg-dark">
+            <span class="navbar-brand mb-0 text-white text-uppercase font-weight-bold">Lost Target Search</span>
+            <div>
+                <button id="visualise" type="button" class="btn btn-light text-uppercase text-secondary mr-2" disabled>Visualize</button>
             </div>
+        </nav>
+    </div>
+    <!-- <h2 class="p-3">Lost Target Search UAV Flight Simulation</h2> -->
+    <div class="main-simulation container-fluid">
+        <div class="row mt-4">
             <div class="col-sm">
-                hello
+                <table id='simulationBoard' />
             </div>
         </div>
     </div>
-    <script src="{{url_for('static', filename='simulation.js')}}" type="module"></script>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+<script src="{{url_for('static', filename='js/simulation.js')}}" type="module"></script>
 
 </html>
