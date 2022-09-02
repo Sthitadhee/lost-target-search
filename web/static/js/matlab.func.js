@@ -19,6 +19,7 @@ export function CreateRandomSolution(model) {
     ]
 
     let shouldStart = true;
+    let position = [];
 
     while (shouldStart) {
         shouldStart = false;
@@ -27,7 +28,6 @@ export function CreateRandomSolution(model) {
             path.push(startNode)
         }
 
-        let position = [];
         let currentNode = startNode;
         for (let iter = 0; iter < n; iter++) {
             let randomIndex = Math.floor(Math.random() * motions.length); //check const or let
@@ -70,7 +70,6 @@ export function CreateRandomSolution(model) {
                     iteration += 1;
                 }
             }
-
             if (iteration >= maxIterations) {
                 shouldStart = true;
                 break;
@@ -81,14 +80,12 @@ export function CreateRandomSolution(model) {
                 position[iter] = motion;
             }
         }
-
-        return position;
     }
+    return position;
 }
 
 // converts position to path. quite weird because only (-)0.7071 converts to (-)1 for instance and everything else remains exactly same
 export function MotionDecode(motion) {
-    console.log(motion)
     const angle = Math.atan2(motion[1], motion[0]);
     const rounded = Math.round(8 * angle / (2 * Math.PI) + 8);
     const octant = rounded % 8;
@@ -123,7 +120,7 @@ export async function myCost(position, model, mapObj) {
             location.y = path[i][1] + model.ymax + 1;
 
             [scaleFactor, Pmap] = UpdateMap(i, model, location, Pmap);
-            await delay(10)
+            await delay(200)
             mapObj.redrawMap(Pmap, model.xs, model.ys);
             pNoDetection = scaleFactor;
             // continue
@@ -164,7 +161,7 @@ function checkMotion(position, model) {
     return valid
 }
 
-function PathFromMotion(position, model, map) {
+function PathFromMotion(position, model) {
     const N = model.n;
     const xs = model.xs;
     const ys = model.ys;

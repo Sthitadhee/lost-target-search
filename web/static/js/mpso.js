@@ -7,7 +7,7 @@ export async function runMpso(model, map) {
 
     // PSO algo parameters
     const maxIteration = 100;
-    const particlePopulation = 1000;
+    const particlePopulation = 50;
     let w = 1;
     const wDamp = 0.98;
     const c1 = 2.5;
@@ -31,7 +31,6 @@ export async function runMpso(model, map) {
 
     // do the random initialisation loop
     for(let i=0; i < particlePopulation; i++) {
-        console.log(i)
         Store.targetPosition = [Store.mean, Store.mean]; // restore target position for every particle start
 
         const velocity = tf.zeros(randGeneratingMatrix);
