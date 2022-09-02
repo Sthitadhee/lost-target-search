@@ -1,7 +1,8 @@
 import Particle from './particle.class.js'
-import { CreateRandomSolution } from './matlab.func.js';
+import { CreateRandomSolution, myCost } from './matlab.func.js';
+import Store from './variable.js'
 
-export function runMpso(model) {
+export async function runMpso(model, map) {
     // ----- set all the parameters -----
 
     // PSO algo parameters
@@ -30,16 +31,19 @@ export function runMpso(model) {
 
     // do the random initialisation loop
     for(let i=0; i < particlePopulation; i++) {
+        console.log(i)
+        Store.targetPosition = [Store.mean, Store.mean]; // restore target position for every particle start
+
         const velocity = tf.zeros(randGeneratingMatrix);
-        const position = CreateRandomSolution(model);
-        const costP = CostFunction(position)
+        const position = CreateRandomSolution(model, map);
+        const costP = await myCost(position, model, map)
         particles[i] = new Particle(position, velocity, costP);
         if( particles[i].getBestCost() > GlobalBest.cost) {
             GlobalBest = particles[i].getParticleBest();
         }
     }
     // create best cost data structure
-    BestCost = zeros(maxIteration, 1)
+    let BestCost = []
 
     // MPSO loop
 

@@ -36,12 +36,17 @@ def createModel():
 
         # get column vector of values from a normal distribution pdf
         pdf = multivariate_normal.pdf(column_stack, mean=mean, cov=covariance)
+
         # round it to 4 decimal places like matlab
         pdf_column = np.around(pdf, 4)
+
         # reshap back to matrix and then to list
         pdf_matrix = np.reshape(pdf_column, (MAPSIZE_X, MAPSIZE_Y))
+
         # sum all the matrix elements
-        pdf_matrix_sum = np.ndarray.sum(pdf_matrix)
+        pdf_matrix_sum = pdf_matrix.sum(keepdims=1)
+
         # divide each element with sum to scale to 1
-        pmap = np.ndarray.tolist(pdf_matrix/pdf_matrix_sum)
+        pmap = np.ndarray.tolist(np.around(pdf_matrix/pdf_matrix_sum, 4))
+
         return str(pmap)
