@@ -71,10 +71,11 @@
                                 class="col-sm-4 col-form-label"
                             >Algorithm Speed</label>
                             <select id="AlgoSpeed" class="form-control form-control-sm col-sm-7">
-                                <option value="500">Very Fast</option>
-                                <option selected value="1000">Fast</option>
-                                <option value="1500">Fast</option>
-                                <option value="2000">Very Slow</option>
+                                <option value="0">Very Fast</option>
+                                <option selected value="10">Fast</option>
+                                <option value="50">Medium</option>
+                                <option value="100">Slow</option>
+                                <option value="200">Very Slow</option>
                             </select>
                         </div>
                         <!-- Target Scenario -->
@@ -93,7 +94,7 @@
                         <div class="form-group row mb-0 justify-content">
                             <label 
                                 class="col-sm-4 col-form-label"
-                            >Uav Position</label>
+                            >Uav Position (x, y)</label>
                             <input 
                                 class="form-control form-control-sm col-sm-3 mr-1" 
                                 id="UavPositionX"
@@ -115,7 +116,7 @@
                                 class="col-sm-4 col-form-label"
                             >Map Dimension</label>
                             <input 
-                                class="form-control form-control-sm col-sm-3 mr-1" 
+                                class="form-control form-control-sm col-sm-7" 
                                 id="mapSize"
                                 disabled
                                 placeholder="Square Dimension"
@@ -125,15 +126,35 @@
                         <!-- Target Mean -->
                         <div class="form-group row mb-0">
                             <label 
-                                for="mean" 
+                                for="meanY" 
                                 class="col-sm-4 col-form-label"
-                            >Target Mean</label>
+                            >Target Mean (x, y)</label>
                             <input 
-                                class="form-control form-control-sm col-sm-7"       
-                                id="mean"
+                                class="form-control form-control-sm col-sm-3 mr-1"       
+                                id="meanX"
                                 disabled
                                 placeholder="Any value from 4 to 36"
-                                value="3"
+                                value="10"
+                            >
+                            <input 
+                                class="form-control form-control-sm col-sm-3"       
+                                id="meanY"
+                                disabled
+                                placeholder="Any value from 4 to 36"
+                                value="10"
+                            >
+                        </div>
+                        <div class="form-group row mb-0">
+                            <label 
+                                for="meanX" 
+                                class="col-sm-4 col-form-label"
+                            >Target Mean X</label>
+                            <input 
+                                class="form-control form-control-sm col-sm-7"       
+                                id="meanX"
+                                disabled
+                                placeholder="Target mean X axis"
+                                value="10"
                             >
                         </div>
                         <!-- Target Covariance -->

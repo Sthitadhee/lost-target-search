@@ -1,4 +1,14 @@
-import { calcSum, fixPrecisionIn2D, normaliseMatrix, arrayAlreadyHasArray, delay } from './helper.js';
+import { 
+    calcSum, 
+    fixPrecisionIn2D, 
+    normaliseMatrix, 
+    arrayAlreadyHasArray, 
+    elementWiseMultiplication, 
+    delay, 
+    _clone ,
+    roundToNDecPlaces
+} from './helper.js';
+import { redrawMap } from './map.js';
 import Store from './variable.js'
 
 export function CreateRandomSolution(model) {
@@ -102,32 +112,32 @@ export function MotionDecode(motion) {
     return moveArray[octant];
 }
 
-export async function myCost(position, model, mapObj) {
+export async function myCost(position, model) {
 
     if (!checkMotion(position, model)) {
         return 0;
     }
     else {
-        let Pmap = JSON.parse(JSON.stringify(model.map));
+        let Pmap = _clone(model.map);
         let scaleFactor, pNoDetection;
         let pDetection = [];
         const N = model.n;
-        let pNoDetectionAtAll = 1;
-        let path = PathFromMotion(position, model, mapObj);
+        let pNoDetectionAtAll = 1.0000;
+        let path = PathFromMotion(position, model);
         let location = {};
         for (let i = 0; i < N; i++) {
             location.x = path[i][0] + model.xmax + 1;
             location.y = path[i][1] + model.ymax + 1;
-
-            [scaleFactor, Pmap] = UpdateMap(i, model, location, Pmap);
-            await delay(200)
-            mapObj.redrawMap(Pmap, model.xs, model.ys);
+            [scaleFactor, Pmap] = UpdateMap(i + 1, model, location, Pmap);
+            await delay(Store.speed)
+            Store.currentMap = _clone(Pmap)
+            redrawMap();
             pNoDetection = scaleFactor;
-            // continue
-            pDetection[i] = pNoDetectionAtAll * (1 - pNoDetection);
+            pDetection[i] = pNoDetectionAtAll * roundToNDecPlaces(1.00000 - pNoDetection); //check
             pNoDetectionAtAll *= pNoDetection;
+            pNoDetectionAtAll = roundToNDecPlaces(pNoDetectionAtAll);
         }
-        return 1 - pNoDetectionAtAll;
+        return roundToNDecPlaces(1.00000 - pNoDetectionAtAll);
     }
 
 }
@@ -161,7 +171,7 @@ function checkMotion(position, model) {
     return valid
 }
 
-function PathFromMotion(position, model) {
+export function PathFromMotion(position, model) {
     const N = model.n;
     const xs = model.xs;
     const ys = model.ys;
@@ -204,18 +214,21 @@ function UpdateMap(index, model, location, map) {
     const move = DirToMove(direction);
     if (targetSteps !== 0) {
         const moveStep = Math.round(pathlength / targetSteps);
-        if ((index+1) % moveStep === 0) {
-            const tmp = noncircshift(JSON.parse(JSON.stringify(map)), move);
+        if (index % moveStep === 0) {
+            const tmp = noncircshift(_clone(map), move);
             map = tmp;
         }
     }
-    let pSensorNoDetection = new Array(MAPSIZE_Y).fill(new Array(MAPSIZE_X).fill(1));
-    pSensorNoDetection[location.y][location.x] = 0;
-    const tensorPsensorNoDetection = tf.tensor(pSensorNoDetection);
-    let tensorNewMap = tf.mul(tensorPsensorNoDetection, tf.tensor(map));
-    map = fixPrecisionIn2D(Array.from(tensorNewMap.arraySync()))
+    let pSensorNoDetection = new Array(MAPSIZE_Y);
+    for (let i = 0; i < MAPSIZE_Y; i++) {
+        pSensorNoDetection[i] = new Array(MAPSIZE_X).fill(1.00000);
+    }
+    pSensorNoDetection[location.y][location.x] = 0.00000;
+    const mulMap = elementWiseMultiplication(pSensorNoDetection, map);
+    map = fixPrecisionIn2D(mulMap)
     const scaleFactor = calcSum(map);
     const newMap = normaliseMatrix(map, scaleFactor, Store.targetPosition);
+    // console.log(_clone(map), _clone(pSensorNoDetection), _clone(mulMap), _clone(newMap), scaleFactor)
     return [scaleFactor, newMap];
 }
 
@@ -250,7 +263,7 @@ export function DirToMove(direction) {
     return move;
 }
 
-function noncircshift(map, movement, target) {
+function noncircshift(map, movement) {
     if (movement[0] > 0) {
         for (let i = 0; i < movement[0]; i++) {
             shiftUp(map);

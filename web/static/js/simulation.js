@@ -1,8 +1,6 @@
-import Map from './map.class.js'
-import Model from './model.class.js'
-import Target from './target.class.js'
+import { drawMap } from './map.js'
 import { runMpso } from './mpso.js'
-import { normaliseMatrix } from './helper.js'
+import { normaliseMatrix, _clone } from './helper.js'
 import Store from './variable.js'
 
 const visualiseBtn = document.getElementById('visualise');
@@ -20,7 +18,7 @@ settingsCloseBtn.addEventListener('click', closeSettings);
 settingsSelectionScene.addEventListener('change', changeScene);
 saveSettingBtn.addEventListener('click', saveSettings);
 
-openHelp();
+// openHelp();
 setTimeout(() => { closeHelp() }, 3000);
 initialiseSimulation();
 
@@ -28,12 +26,30 @@ function initialiseSimulation() {
     
     const MAPSIZE_X = Store.mapSizeX;
     const MAPSIZE_Y = Store.mapSizeY;
-    const MEAN = [Store.mean, Store.mean]
+    const MEAN = [Store.meanY, Store.meanX]
     const COVAR = [[Store.covariance, 0], [0, Store.covariance]]
-    const ALGO = Store.algo
 
-    let model = new Model(MAPSIZE_X, MAPSIZE_Y);
-    let target = new Target(MEAN, COVAR)
+    const model = {
+        xs: Store.uavPositionX,
+        ys: Store.uavPositionY,
+        mrange: 4,
+        n: Store.uavFlightSteps,
+        xmin: -Math.floor(MAPSIZE_X / 2),
+        xmax: Math.floor(MAPSIZE_X / 2),
+        ymin: -Math.floor(MAPSIZE_Y / 2),
+        ymax: Math.floor(MAPSIZE_Y / 2),
+        X: Store.mean,
+        Y: Store.mean,
+        targetDir: 'E', // check allow option to change
+        targetSteps: 10, // check allow option to change
+        map: [],
+        MAPSIZE_X: MAPSIZE_X,
+        MAPSIZE_Y: MAPSIZE_Y,
+    };
+    let target = {
+        mean: MEAN,
+        covariance: COVAR,
+    };
     
     fetchMap();
     
@@ -54,26 +70,26 @@ function initialiseSimulation() {
         }
         const data = await fetch(`${window.origin}/result`, fetchJsonRequest)
         let pmap = await data.json();
-        const tensorPmap = tf.tensor(pmap, [MAPSIZE_X, MAPSIZE_Y], 'float32');
+        const tensorPmap = tf.tensor(pmap, [MAPSIZE_Y, MAPSIZE_X], 'float32');
         const sum = Number((Number((tf.sum(tensorPmap)).dataSync())).toFixed(5));
         pmap = normaliseMatrix(pmap, sum, MEAN)
     
-        model.map = pmap;
-        let map = new Map();
-        map.drawMap(model.map, model.xs, model.ys);
-    
+        model.map = _clone(pmap);
+        Store.currentMap = _clone(pmap);
+        drawMap();
+
         visualiseBtn.disabled = false;
         visualiseBtn.addEventListener('click', () => {
-            visualiseAlgo(model, map, ALGO)
+            visualiseAlgo(model)
         })
     }
 }
 
 
-function visualiseAlgo(model, map, algo) {
+function visualiseAlgo(model) {
     // call mpso
-    if (algo == 'MPSO') {
-        runMpso(model, map);
+    if (Store.algo === 'MPSO') {
+        runMpso(model);
     }
 }
 
@@ -150,7 +166,8 @@ function changeScene(event) {
 function saveSettings() {
     const inputUavPositionX = document.getElementById('UavPositionX').value;
     const inputUavPositionY = document.getElementById('UavPositionY').value;
-    const inputMean = document.getElementById('mean').value;
+    const inputMeanX = document.getElementById('meanX').value;
+    const inputMeanY = document.getElementById('meanY').value;
     const inputCovariance = document.getElementById('covariance').value;
     const inputAlgoType = document.getElementById('AlgoType').value;
     const inputAlgoSpeed = document.getElementById('AlgoSpeed').value;
@@ -158,15 +175,21 @@ function saveSettings() {
     const inputUavFlightSteps = document.getElementById('UavSteps').value;
 
     
+    
     Store.mapSizeX = Store.mapSizeY= Number(inputMapDim);
     Store.speed = Number(inputAlgoSpeed);
     Store.algo = inputAlgoType;
-    Store.mean = Number(inputMean);
+    Store.meanX = Number(inputMeanX);
+    Store.meanY = Number(inputMeanY);
     Store.covariance = Number(inputCovariance);
     Store.uavPositionX = Number(inputUavPositionX);
     Store.uavPositionY = Number(inputUavPositionY);
     Store.uavFlightSteps = Number(inputUavFlightSteps);
     
+    Store.targetPosition = [Store.meanY, Store.meanX]
+    Store.currentMap = [];
+    
+    console.log(_clone(Store))
     initialiseSimulation();
     closeSettings();
 }
