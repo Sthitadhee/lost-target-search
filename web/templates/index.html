@@ -15,17 +15,10 @@
         <nav class="navbar navbar-light bg-dark">
             <span class="navbar-brand mb-0 text-white text-uppercase font-weight-bold">Lost Target Search</span>
             <div class="d-flex">
-                <button 
-                    id="help-open-btn" 
-                    type="button" 
-                    class="btn btn-light text-uppercase text-danger mr-3"
-                >?</button>
-                <button 
-                    id="visualise" 
-                    type="button" 
-                    class="btn btn-light text-uppercase text-secondary mr-3"
-                    disabled
-                >Visualize</button>
+                <button id="help-open-btn" type="button"
+                    class="btn btn-light text-uppercase text-danger mr-3">?</button>
+                <button id="visualise" type="button" class="btn btn-light text-uppercase text-secondary mr-3"
+                    disabled>Visualize</button>
                 <button class="btn btn-light text-secondary d-flex justify-content align-items" id="settings-open-btn">
                     <img src="../static/img/glyph-icons-settings.png" alt="Settings for program" id="settings-btn-icon"
                         title="Open Setting To Configure The Algorithm">
@@ -33,185 +26,144 @@
             </div>
         </nav>
     </div>
-    <!-- <h2 class="p-3">Lost Target Search UAV Flight Simulation</h2> -->
-    <div class="main-simulation container-fluid">
+
+    <section class="main-simulation container-fluid">
         <div class="row mt-0">
             <div class="col-sm">
-                <table id='simulationBoard' class=" mt-4" />
+                <table id='simulationBoard' class="mt-4" />
+            </div>
+            <table id="simulationBoardSm" />
+            <p id="simulationBoardSmCost"></p>
+            <div id="simulationInfo" class="bg-light"></div>
+        </div>
+    </section>
+    <section>
+        <div class="modal fade" id="settings" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Change Setting Of Algorithm</h5>
+                        <button type="button" class="close" id="settings-close-btn" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="">
+                            <!-- Type of Algorithm To Search Target -->
+                            <div class="form-group row mb-0">
+                                <label for="AlgoType" class="col-sm-4 col-form-label">Algorithm Type</label>
+                                <select id="AlgoType" class="form-control form-control-sm col-sm-7">
+                                    <option selected>MPSO</option>
+                                    <option disabled>Levy MPSO</option>
+                                </select>
+                            </div>
+                            <!-- Algorithm Speed -->
+                            <div class="form-group row mb-0">
+                                <label for="AlgoSpeed" class="col-sm-4 col-form-label">Algorithm Speed</label>
+                                <select id="AlgoSpeed" class="form-control form-control-sm col-sm-7">
+                                    <option selected value="0">Fast</option>
+                                    <option value="20">Medium</option>
+                                    <option value="40">Slow</option>
+                                    <option value="50">Very Slow</option>
+                                    <option value="200">I am too slow!</option>
+                                </select>
+                            </div>
+                            <!-- Target Scenario -->
+                            <div class="form-group row mb-0">
+                                <label for="scenes" class="col-sm-4 col-form-label">Target Scenario</label>
+                                <select id="scenes" class="form-control form-control-sm col-sm-7">
+                                    <option selected>Scene 1</option>
+                                    <option>Scene 2</option>
+                                    <option>Scene 3</option>
+                                    <option>Scene 4</option>
+                                    <option>Scene 5</option>
+                                    <option>Scene 6</option>
+                                </select>
+                            </div>
+                            <!-- uav position -->
+                            <div class="form-group row mb-0 justify-content">
+                                <label class="col-sm-4 col-form-label">Uav Position (x, y)</label>
+                                <input class="form-control form-control-sm col-sm-3 mr-1" id="UavPositionX" disabled
+                                    placeholder="X Value" value="0">
+                                <input class="form-control form-control-sm col-sm-3" id="UavPositionY" disabled
+                                    placeholder="Y Value" value="0">
+                            </div>
+                            <!-- Map Size -->
+                            <div class="form-group row mb-0 justify-content">
+                                <label class="col-sm-4 col-form-label">Map Dimension</label>
+                                <input class="form-control form-control-sm col-sm-7" id="mapSize" disabled
+                                    placeholder="Square Dimension" value="40">
+                            </div>
+                            <!-- Target Mean -->
+                            <div class="form-group row mb-0">
+                                <label for="meanY" class="col-sm-4 col-form-label">Target Mean (x, y)</label>
+                                <input class="form-control form-control-sm col-sm-3 mr-1" id="meanX" disabled
+                                    placeholder="Any value from 4 to 36" value="10">
+                                <input class="form-control form-control-sm col-sm-3" id="meanY" disabled
+                                    placeholder="Any value from 4 to 36" value="10">
+                            </div>
+                            <div class="form-group row mb-0">
+                                <label for="meanX" class="col-sm-4 col-form-label">Target Mean X</label>
+                                <input class="form-control form-control-sm col-sm-7" id="meanX" disabled
+                                    placeholder="Target mean X axis" value="10">
+                            </div>
+                            <!-- Target Covariance -->
+                            <div class="form-group row mb-0">
+                                <label for="covariance" class="col-sm-4 col-form-label">Target Covariance</label>
+                                <input class="form-control form-control-sm col-sm-7" id="covariance" disabled
+                                    placeholder="Any value from 0.05 to 4" value="2">
+                            </div>
+                            <!-- Target Covariance -->
+                            <div class="form-group row mb-0">
+                                <label for="covariance" class="col-sm-4 col-form-label">Target Direction</label>
+                                <select id="scenes" class="form-control form-control-sm col-sm-7" disabled>
+                                    <option selected>E</option>
+                                    <option>N</option>
+                                    <option>S</option>
+                                    <option>W</option>
+                                    <option>NW</option>
+                                    <option>NE</option>
+                                    <option>SE</option>
+                                    <option>SW</option>
+                                </select>
+                            </div>
+                            <!-- Uav flight Search Steps -->
+                            <div class="form-group row mb-0">
+                                <label for="UavSteps" class="col-sm-4 col-form-label" title="Flight Constraint">Uav
+                                    Flight
+                                    Steps</label>
+                                <input class="form-control form-control-sm col-sm-7" id="UavSteps"
+                                    placeholder="Any value from 5 to 20. Only integers." value="20">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="settings-save-btn">Save</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="settings" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Change Setting Of Algorithm</h5>
-                    <button type="button" class="close" id="settings-close-btn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="">
-                        <!-- Type of Algorithm To Search Target -->
-                        <div class="form-group row mb-0">
-                            <label 
-                                for="AlgoType" 
-                                class="col-sm-4 col-form-label"
-                            >Algorithm Type</label>
-                            <select id="AlgoType" class="form-control form-control-sm col-sm-7">
-                                <option selected>MPSO</option>
-                                <option disabled>Levy MPSO</option>
-                            </select>
-                        </div>
-                        <!-- Algorithm Speed -->
-                        <div class="form-group row mb-0">
-                            <label 
-                                for="AlgoSpeed" 
-                                class="col-sm-4 col-form-label"
-                            >Algorithm Speed</label>
-                            <select id="AlgoSpeed" class="form-control form-control-sm col-sm-7">
-                                <option value="0">Very Fast</option>
-                                <option selected value="10">Fast</option>
-                                <option value="50">Medium</option>
-                                <option value="100">Slow</option>
-                                <option value="200">Very Slow</option>
-                            </select>
-                        </div>
-                        <!-- Target Scenario -->
-                        <div class="form-group row mb-0">
-                            <label for="scenes" class="col-sm-4 col-form-label">Target Scenario</label>
-                            <select id="scenes" class="form-control form-control-sm col-sm-7">
-                                <option selected>Scene 1</option>
-                                <option>Scene 2</option>
-                                <option>Scene 3</option>
-                                <option>Scene 4</option>
-                                <option>Scene 5</option>
-                                <option>Scene 6</option>
-                            </select>
-                        </div>
-                        <!-- uav position -->
-                        <div class="form-group row mb-0 justify-content">
-                            <label 
-                                class="col-sm-4 col-form-label"
-                            >Uav Position (x, y)</label>
-                            <input 
-                                class="form-control form-control-sm col-sm-3 mr-1" 
-                                id="UavPositionX"
-                                disabled
-                                placeholder="X Value"
-                                value="0"
-                            >
-                            <input 
-                                class="form-control form-control-sm col-sm-3" 
-                                id="UavPositionY"
-                                disabled
-                                placeholder="Y Value"
-                                value="0"
-                            >
-                        </div>
-                         <!-- Map Size -->
-                        <div class="form-group row mb-0 justify-content">
-                            <label 
-                                class="col-sm-4 col-form-label"
-                            >Map Dimension</label>
-                            <input 
-                                class="form-control form-control-sm col-sm-7" 
-                                id="mapSize"
-                                disabled
-                                placeholder="Square Dimension"
-                                value="40"
-                            >
-                        </div>
-                        <!-- Target Mean -->
-                        <div class="form-group row mb-0">
-                            <label 
-                                for="meanY" 
-                                class="col-sm-4 col-form-label"
-                            >Target Mean (x, y)</label>
-                            <input 
-                                class="form-control form-control-sm col-sm-3 mr-1"       
-                                id="meanX"
-                                disabled
-                                placeholder="Any value from 4 to 36"
-                                value="10"
-                            >
-                            <input 
-                                class="form-control form-control-sm col-sm-3"       
-                                id="meanY"
-                                disabled
-                                placeholder="Any value from 4 to 36"
-                                value="10"
-                            >
-                        </div>
-                        <div class="form-group row mb-0">
-                            <label 
-                                for="meanX" 
-                                class="col-sm-4 col-form-label"
-                            >Target Mean X</label>
-                            <input 
-                                class="form-control form-control-sm col-sm-7"       
-                                id="meanX"
-                                disabled
-                                placeholder="Target mean X axis"
-                                value="10"
-                            >
-                        </div>
-                        <!-- Target Covariance -->
-                        <div class="form-group row mb-0">
-                            <label 
-                                for="covariance" 
-                                class="col-sm-4 col-form-label"
-                            >Target Covariance</label>
-                            <input 
-                                class="form-control form-control-sm col-sm-7"       
-                                id="covariance"
-                                disabled
-                                placeholder="Any value from 0.05 to 4"
-                                value="2"
-                            >
-                        </div>
-                        <!-- Uav flight Search Steps -->
-                        <div class="form-group row mb-0">
-                            <label 
-                                for="UavSteps" 
-                                class="col-sm-4 col-form-label"
-                                title="Flight Constraint"
-                            >Uav Flight Steps</label>
-                            <input 
-                                class="form-control form-control-sm col-sm-7"       
-                                id="UavSteps"
-                                placeholder="Any value from 5 to 20. Only integers."
-                                value="20"
-                            >
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="settings-save-btn">Save</button>
+        <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="helpLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-warning" id="helpLabel">Info Manual</h5>
+                        <button type="button" class="close" id="help-close-btn" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="uav-symbol">UAV Symbol</div>
+                        <div class="path-symbol">Path Symbol</div>
+                        <div class="target-symbol">Target Symbol</div>
+                        <div class="cell-symbol">Cell Symbol</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="helpLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-warning" id="helpLabel">Info Manual</h5>
-              <button type="button" class="close" id="help-close-btn" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <div class="uav-symbol">UAV Symbol</div>
-                <div class="path-symbol">Path Symbol</div>
-                <div class="target-symbol">Target Symbol</div>
-                <div class="cell-symbol">Cell Symbol</div>
-            </div>
-          </div>
-        </div>
-      </div>
+    </section>
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>

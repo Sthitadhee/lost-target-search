@@ -67,7 +67,7 @@ export function elementWiseMultiplication(twoDimArr1, twoDimArr2) {
 
     if(valid) {
         for(let i=0; i<twoDimArr1.length; i++) {
-            if(twoDimArr1[i].length === twoDimArr2.length) {
+            if(twoDimArr1[i].length === twoDimArr2[i].length) {
                 arr[i] = [];
                 for(let j=0; j<twoDimArr1[i].length; j++) {
                     const mul = twoDimArr1[i][j] * twoDimArr2[i][j];
@@ -101,7 +101,7 @@ export function elementWiseAddition(twoDimArr1, twoDimArr2) {
 
     if(valid) {
         for(let i=0; i<twoDimArr1.length; i++) {
-            if(twoDimArr1[i].length === twoDimArr2.length) {
+            if(twoDimArr1[i].length === twoDimArr2[i].length) {
                 arr[i] = [];
                 for(let j=0; j<twoDimArr1[i].length; j++) {
                     const add = twoDimArr1[i][j] + twoDimArr2[i][j];
@@ -122,7 +122,7 @@ export function elementWiseSubtraction(twoDimArr1, twoDimArr2) {
 
     if(valid) {
         for(let i=0; i<twoDimArr1.length; i++) {
-            if(twoDimArr1[i].length === twoDimArr2.length) {
+            if(twoDimArr1[i].length === twoDimArr2[i].length) {
                 arr[i] = [];
                 for(let j=0; j<twoDimArr1[i].length; j++) {
                     const add = twoDimArr1[i][j] - twoDimArr2[i][j];

@@ -1,29 +1,30 @@
 import { CreateRandomSolution, myCost, PathFromMotion } from './matlab.func.js';
 import Store from './variable.js'
-import { delay, elementWiseAddition, elementWiseMultiplication, elementWiseMultiplicationWithConstant, elementWiseSubtraction, fixPrecisionIn2D } from './helper.js';
-import { redrawMap } from './map.js';
+import { delay, elementWiseAddition, elementWiseMultiplication, elementWiseMultiplicationWithConstant, elementWiseSubtraction, fixPrecisionIn2D, _clone } from './helper.js';
+import { drawSideMap, redrawMap, createPath, drawSideInfo } from './map.js';
 
-export async function runMpso(model) {
+export async function runMpso(model, e) {
     // ----- set all the parameters -----
 
     // PSO algo parameters
-    const maxIteration = 100;
-    const particlePopulation = 10;
+    const maxIteration = Store.noMpsoRepeat; // 100
+    Store.noMpsoRepeat = maxIteration;
+    const particlePopulation = Store.nParticles; //1000
     let w = 1;
     const wDamp = 0.98;
     const c1 = 2.5;
     const c2 = 2.5;
 
     //pso uav parameters
-    const nFlightSteps = model.n;
+    // const nFlightSteps = model.n;
     const randGeneratingMatrix = [model.n, 2] // not sure how it will work
 
     // pso boundary parameters
-    const maxPosition = model.mrange;
-    const minPosition = -model.mrange;
-    const alpha = 2;
-    const maxVelocity = alpha * (maxPosition - minPosition)
-    const minVelocity = -maxVelocity;
+    // const maxPosition = model.mrange;
+    // const minPosition = -model.mrange;
+    // const alpha = 2;
+    // const maxVelocity = alpha * (maxPosition - minPosition);
+    // const minVelocity = -maxVelocity;
 
     // ----- create particle obj -----
     let particles = {};
@@ -31,88 +32,113 @@ export async function runMpso(model) {
     GlobalBest.cost = -1;
 
     // do the random initialisation loop
-    for (let i = 0; i < particlePopulation; i++) {
-        // console.log(i);
-        Store.targetPosition = [Store.meanY, Store.meanX]; // restore target position for every particle start
+    Store.nParticles = particlePopulation;
+    Store.currentStatus = 'Initialising Particles Randomly'
+    Store.currentMPSOindex = 1;
+    drawSideInfo();
+    await delay(1500);
+    for (let i = 1; i < particlePopulation + 1; i++) {
+        Store.currentMPSOindex = i;
+        await delay(500);
+        drawSideInfo();
+        // draw the current global best
+        drawSideMap(GlobalBest.cost);
+        Store.targetPosition = [Store.meanY - 1, Store.meanX - 1]; // restore target position for every particle start
 
         let velocity = new Array(randGeneratingMatrix[0]);
-        for (let i = 0; i < randGeneratingMatrix[0]; i++) {
-            velocity[i] = new Array(randGeneratingMatrix[1]).fill(0.00000);
+        for (let j = 0; j < randGeneratingMatrix[0]; j++) {
+            velocity[j] = new Array(randGeneratingMatrix[1]).fill(0.00000);
         }
         const position = CreateRandomSolution(model);
         const costP = await myCost(position, model)
-        particles[i] = {
+        Store.currentCost = costP;
+        Store.currentPBest = costP;
+        particles[i - 1] = {
             velocity,
             position,
             cost: costP,
             bestCost: costP,
-            bestPosition: position
+            bestPosition: _clone(position)
         };
-        if (particles[i].bestCost > GlobalBest.cost) {
+        if (particles[i - 1].bestCost > GlobalBest.cost) {
             GlobalBest = {
-                cost: particles[i].bestCost,
-                position: particles[i].bestPosition
+                cost: particles[i - 1].bestCost,
+                position: _clone(particles[i - 1].bestPosition)
             };
         }
-        throw new Error()
+        Store.currentGBest = GlobalBest.cost;
+        createMiniMap(GlobalBest.position, model);
+        drawSideMap(GlobalBest.cost);
     }
+    Store.currentStatus = 'Random Best particle path';
+    drawSideInfo();
+    createFinalMap(GlobalBest.position, model);
+    redrawMap(true);
+    await delay(5000);
 
-    let p = GlobalBest.position;
-    let cost = GlobalBest.cost;
-
-    console.log(p, cost)
-    const path = PathFromMotion(p, model)
-    Store.path = [];
-    for (let p = 0; p < path.length; p++) {
-        Store.path.push(`${path[p][0]},${path[p][1]}`)
-    }
-    await delay(1000);
-    redrawMap(true)
-
-
-    // console.log(GlobalBest)
-    // console.log(particles);
-    // create best cost data structure
     let BestCost = []
 
     // MPSO loop
-    // for(let it=0; it<maxIteration; it++) {
-        
-    //     for(let i=0; i < particlePopulation; i++) {
-    //         Store.targetPosition = [Store.mean, Store.mean];
-    
-    //         particles[i].velocity = calculatedMpsoUpdatedVelocity(w, c1, c2, particles[i], randGeneratingMatrix, GlobalBest); //check
-    //         particles[i].position = elementWiseAddition(particles[i].position, particles[i].velocity);
-    //         const costP = await myCost(particles[i].position, model, map)
-    //         particles[i].cost = costP;
-    //         if(particles[i].cost > particles[i].bestCost) {
-    //             particles[i].bestCost = particles[i].cost;
-    //             particles[i].bestPosition = particles[i].position; //check for js arry problem
-                
-    //             if (particles[i].bestCost > GlobalBest.cost) {
-    //                 GlobalBest = {
-    //                     cost: particles[i].bestCost,
-    //                     position: particles[i].bestPosition
-    //                 };
-    //             }
-    //         }
-    //     }
+    Store.currentMPSOindex = 1;
+    Store.isRandomInitialisation = false;
+    Store.currentStatus = 'Optimal Search Path using MPSO';
+    drawSideInfo()
+    await delay(1500)
+    for (let it = 0; it < maxIteration; it++) {
+        Store.currentMpsoRepeatIndex = it;
 
-    //     BestCost[it] = {
-    //         cost: GlobalBest.cost,
-    //         position: GlobalBest.position
-    //     };
-    //     w = w * wDamp;
-    // }
+        for (let i = 0; i < particlePopulation; i++) {
+            Store.currentMPSOindex = i+1;
+            await delay(500);
+            drawSideInfo();
+            Store.targetPosition = [Store.meanY - 1, Store.meanX - 1];
+
+            particles[i].velocity = calculatedMpsoUpdatedVelocity(w, c1, c2, particles[i], randGeneratingMatrix, GlobalBest); //check
+            particles[i].position = elementWiseAddition(particles[i].position, particles[i].velocity);
+            const costP = await myCost(particles[i].position, model)
+            particles[i].cost = costP;
+            Store.currentCost = costP;
+            if (particles[i].cost > particles[i].bestCost) {
+                particles[i].bestCost = particles[i].cost;
+                particles[i].bestPosition = _clone(particles[i].position); //check for js arry problem
+
+                if (particles[i].bestCost > GlobalBest.cost) {
+                    GlobalBest = {
+                        cost: particles[i].bestCost,
+                        position: _clone(particles[i].bestPosition)
+                    };
+                }
+            }
+            Store.currentGBest = GlobalBest.cost;
+            drawSideInfo();
+            createMiniMap(GlobalBest.position, model);
+            drawSideMap(GlobalBest.cost);
+        }
+
+        BestCost[it] = {
+            cost: GlobalBest.cost,
+            position: GlobalBest.position
+        };
+        w = w * wDamp;
+    }
     // Get the results
+    Store.currentStatus = 'Best particle path using MPSO'
+    drawSideInfo();
+    createFinalMap(GlobalBest.position, model);
+    await delay(1000);
+    redrawMap(true);
 
+
+    Store.currentStatus = 'Press VISUALIZE to start again!'
+    drawSideInfo();
     // graph the results
 
+    e.target.disabled = false;
+    e.target.classList.remove('bg-success');
 }
 
 
 function calculatedMpsoUpdatedVelocity(w, c1, c2, particle, rMatrix, GlobalBest) {
-    let velocity = undefined;
     const wVelocity = elementWiseMultiplicationWithConstant(particle.velocity, w);
     const subtractCurrentFromPBestPosition = elementWiseSubtraction(particle.bestPosition, particle.position);
     const subtractCurrentFromGlobalPosition = elementWiseSubtraction(GlobalBest.position, particle.position);
@@ -121,8 +147,8 @@ function calculatedMpsoUpdatedVelocity(w, c1, c2, particle, rMatrix, GlobalBest)
     const randomC2 = elementWiseMultiplicationWithConstant(randomValuesArr, c2);
     const mulC1ToPbest = elementWiseMultiplication(randomC1, subtractCurrentFromPBestPosition);
     const mulC2ToGbest = elementWiseMultiplication(randomC2, subtractCurrentFromGlobalPosition);
-    const addC1ToC2 = elementWiseAddition(mulC1ToPbest + mulC2ToGbest);
-    velocity = elementWiseAddition(wVelocity, addC1ToC2);
+    const addC1ToC2 = elementWiseAddition(mulC1ToPbest, mulC2ToGbest);
+    const velocity = elementWiseAddition(wVelocity, addC1ToC2);
     return velocity;
 }
 
@@ -130,4 +156,15 @@ function calculateRandomValues(matrix) {
     const tfMatrix = tf.randomUniform(matrix);
     const arr = Array.from(tfMatrix.arraySync());
     return fixPrecisionIn2D(arr, 5);
+}
+
+function createMiniMap(gBestPos, model) {
+    const path = PathFromMotion(gBestPos, model);
+    createPath('miniMap', path);
+
+}
+
+function createFinalMap(gBestPos, model) {
+    const path = PathFromMotion(gBestPos, model)
+    createPath('maxMap', path)
 }

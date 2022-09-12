@@ -1,7 +1,35 @@
 #simulationBoard {
     border: 1px solid rgb(175, 216, 248);
-    /* margin-bottom: 1rem; */
     margin: auto;
+}
+
+#simulationBoardSm {
+    border: 1px solid rgb(175, 216, 248);
+    position: absolute;
+    top: 3vh;
+    right: 3vh;
+}
+
+#circle-play-btn {
+    position: absolute;
+    left: 3vh;
+    top: 3vh;
+}
+
+#simulationInfo {
+    position: absolute;
+    left: 0vh;
+    top: 25vh;
+    padding: 1rem;
+    background-color: rgb(255, 255, 220);
+    border: 2px solid #f4f4f4;
+    border-radius: 5px;
+}
+
+#simulationBoardSmCost {
+    position: absolute;
+    top: 330px;
+    right: 135px;
 }
 
 h2 {
@@ -16,6 +44,11 @@ h2 {
     border: 0.1px solid rgba(175, 216, 248, 0.9);
 }
 
+.s-col.sm {
+    width: 7.5px;
+    height: 7.5px;
+}
+
 .uav {
     background-color: rgba(255, 0, 0, 0.8);
     border-radius: 10%;
@@ -27,10 +60,12 @@ h2 {
 }
 
 .particle-movement {
-    background-color: rgba(0, 255, 255, 0.5);
+    background-color: rgba(0, 255, 255, 0.3);
     font-size: 8px;
     text-align: center;
-    position: relative;
+}
+.particle-movement.sm {
+    font-size: 4px;
 }
 
 #visualise, #help-open-btn {
@@ -62,4 +97,13 @@ label {
 
 .model-header {
     border-bottom: 0!important;
+}
+
+.algo-status, .algo-status-details {
+    font-size: 1.3rem;
+    font-family: monospace;
+}
+
+.algo-status-details {
+    font-size: 1rem;
 }

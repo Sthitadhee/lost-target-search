@@ -1,19 +1,19 @@
-import { 
-    calcSum, 
-    fixPrecisionIn2D, 
-    normaliseMatrix, 
-    arrayAlreadyHasArray, 
-    elementWiseMultiplication, 
-    delay, 
-    _clone ,
+import {
+    calcSum,
+    fixPrecisionIn2D,
+    normaliseMatrix,
+    arrayAlreadyHasArray,
+    elementWiseMultiplication,
+    delay,
+    _clone,
     roundToNDecPlaces
 } from './helper.js';
-import { redrawMap } from './map.js';
+import { createPath, redrawMap } from './map.js';
 import Store from './variable.js'
 
 export function CreateRandomSolution(model) {
-    let n = model.n;
-    let startNode = [model.xs, model.ys]
+    const N = model.n;
+    const startNode = [model.xs, model.ys]
     let path = []; //check this
     const maxIterations = 100;
 
@@ -34,12 +34,12 @@ export function CreateRandomSolution(model) {
     while (shouldStart) {
         shouldStart = false;
 
-        for (let iter = 0; iter < n; iter++) {
+        for (let iter = 0; iter < N; iter++) {
             path.push(startNode)
         }
 
         let currentNode = startNode;
-        for (let iter = 0; iter < n; iter++) {
+        for (let iter = 0; iter < N; iter++) {
             let randomIndex = Math.floor(Math.random() * motions.length); //check const or let
             let motion = motions[randomIndex];
             let invalidFlag = true;
@@ -197,10 +197,7 @@ export function PathFromMotion(position, model) {
         path[i] = currentNode;
         currentNode = nextNode;
     }
-    Store.path = [];
-    for (let p = 0; p < path.length; p++) {
-        Store.path.push(`${path[p][0]},${path[p][1]}`)
-    }
+    createPath('maxMap', path)
     return path;
 }
 
@@ -241,9 +238,6 @@ export function DirToMove(direction) {
         case 'NE':
             move = [1, 1];
             break;
-        case 'E':
-            move = [0, 1];
-            break;
         case 'SE':
             move = [-1, 1];
             break;
@@ -259,6 +253,9 @@ export function DirToMove(direction) {
         case 'NW':
             move = [1, -1];
             break;
+        default:
+            move = [0, 1];
+            break;
     }
     return move;
 }
@@ -266,13 +263,13 @@ export function DirToMove(direction) {
 function noncircshift(map, movement) {
     if (movement[0] > 0) {
         for (let i = 0; i < movement[0]; i++) {
-            shiftUp(map);
-            Store.targetPosition[0] = Store.targetPosition[0] + 1;
+            shiftDown(map);
+            Store.targetPosition[0] = Store.targetPosition[0] + 1; // because of inverse drawing of map
         }
     }
     if (movement[0] < 0) {
-        for (let i = 0; i < movement[0]; i++) {
-            shiftDown(map);
+        for (let i = 0; i < Math.abs(movement[0]); i++) {
+            shiftUp(map);
             Store.targetPosition[0] = Store.targetPosition[0] - 1;
         }
     }
@@ -283,7 +280,7 @@ function noncircshift(map, movement) {
         }
     }
     if (movement[1] < 0) {
-        for (let i = 0; i < movement[1]; i++) {
+        for (let i = 0; i < Math.abs(movement[1]); i++) {
             shiftLeft(map);
             Store.targetPosition[1] = Store.targetPosition[1] - 1;
         }

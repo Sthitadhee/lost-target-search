@@ -1,9 +1,10 @@
-import { drawMap } from './map.js'
+import { drawMap, drawSideInfo } from './map.js'
 import { runMpso } from './mpso.js'
 import { normaliseMatrix, _clone } from './helper.js'
 import Store from './variable.js'
 
 const visualiseBtn = document.getElementById('visualise');
+let visualiseAddEventListenerActivated = false;
 const settingsOpenBtn = document.getElementById('settings-open-btn');
 const helpOpenBtn = document.getElementById('help-open-btn');
 const helpCloseBtn = document.getElementById('help-close-btn');
@@ -17,6 +18,7 @@ settingsOpenBtn.addEventListener('click', openSettings);
 settingsCloseBtn.addEventListener('click', closeSettings);
 settingsSelectionScene.addEventListener('change', changeScene);
 saveSettingBtn.addEventListener('click', saveSettings);
+let model = {};
 
 // openHelp();
 setTimeout(() => { closeHelp() }, 3000);
@@ -26,10 +28,10 @@ function initialiseSimulation() {
     
     const MAPSIZE_X = Store.mapSizeX;
     const MAPSIZE_Y = Store.mapSizeY;
-    const MEAN = [Store.meanY, Store.meanX]
+    const MEAN = [Store.meanY - 1, Store.meanX - 1] // python starts from 0
     const COVAR = [[Store.covariance, 0], [0, Store.covariance]]
 
-    const model = {
+    model = {
         xs: Store.uavPositionX,
         ys: Store.uavPositionY,
         mrange: 4,
@@ -38,19 +40,20 @@ function initialiseSimulation() {
         xmax: Math.floor(MAPSIZE_X / 2),
         ymin: -Math.floor(MAPSIZE_Y / 2),
         ymax: Math.floor(MAPSIZE_Y / 2),
-        X: Store.mean,
-        Y: Store.mean,
-        targetDir: 'E', // check allow option to change
+        X: Store.meanX,
+        Y: Store.meanY,
+        targetDir: Store.targetDir, // check allow option to change
         targetSteps: 10, // check allow option to change
         map: [],
         MAPSIZE_X: MAPSIZE_X,
         MAPSIZE_Y: MAPSIZE_Y,
     };
-    let target = {
+
+    const target = {
         mean: MEAN,
         covariance: COVAR,
     };
-    
+
     fetchMap();
     
     async function fetchMap() {
@@ -77,19 +80,24 @@ function initialiseSimulation() {
         model.map = _clone(pmap);
         Store.currentMap = _clone(pmap);
         drawMap();
+        drawSideInfo();
 
         visualiseBtn.disabled = false;
-        visualiseBtn.addEventListener('click', () => {
-            visualiseAlgo(model)
-        })
+        if(visualiseAddEventListenerActivated) { return }
+        visualiseBtn.addEventListener('click', async (e) => {
+            e.target.disabled = true;
+            e.target.classList.add('bg-success');
+            visualiseAlgo(e);
+        });
+        visualiseAddEventListenerActivated = true;
     }
 }
 
 
-function visualiseAlgo(model) {
+function visualiseAlgo(e) {
     // call mpso
     if (Store.algo === 'MPSO') {
-        runMpso(model);
+        runMpso(model, e);
     }
 }
 
@@ -184,12 +192,13 @@ function saveSettings() {
     Store.covariance = Number(inputCovariance);
     Store.uavPositionX = Number(inputUavPositionX);
     Store.uavPositionY = Number(inputUavPositionY);
+    Store.targetDir = Number(inputUavPositionY);
     Store.uavFlightSteps = Number(inputUavFlightSteps);
     
-    Store.targetPosition = [Store.meanY, Store.meanX]
+    Store.targetPosition = [Store.meanY - 1, Store.meanX - 1]
     Store.currentMap = [];
+    Store.path = [];
     
-    console.log(_clone(Store))
     initialiseSimulation();
     closeSettings();
 }
