@@ -4,8 +4,8 @@ export function normaliseMatrix(matrix, sum, mean) {
     const nrow = matrix.length;
     let calcSum = 0;
 
-    for(let r=0; r < nrow; r++) {
-        for(let c=0; c < ncol; c++) {
+    for (let r = 0; r < nrow; r++) {
+        for (let c = 0; c < ncol; c++) {
             matrix[r][c] = Number((matrix[r][c] / sum).toFixed(4));
             calcSum += Number(matrix[r][c]);
             calcSum = Number(calcSum.toPrecision(7))
@@ -22,8 +22,8 @@ export function calcSum(matrix) {
     const nrow = matrix.length;
     let sum = 0;
 
-    for(let r=0; r < nrow; r++) {
-        for(let c=0; c < ncol; c++) {
+    for (let r = 0; r < nrow; r++) {
+        for (let c = 0; c < ncol; c++) {
             sum += Number(matrix[r][c]);
             sum = roundToNDecPlaces(sum)
         }
@@ -31,30 +31,30 @@ export function calcSum(matrix) {
     return sum
 }
 
-export function fixPrecisionIn2D(matrix, precision=7) { //check
+export function fixPrecisionIn2D(matrix, precision = 7) { //check
     const ncol = matrix[0].length;
     const nrow = matrix.length;
 
-    for(let r=0; r < nrow; r++) {
-        for(let c=0; c < ncol; c++) {
+    for (let r = 0; r < nrow; r++) {
+        for (let c = 0; c < ncol; c++) {
             matrix[r][c] = Number((matrix[r][c]).toPrecision(precision));
         }
     }
     return matrix;
 }
 
-export function arrayAlreadyHasArray(arr, subarr){
-    for(var i = 0; i<arr.length; i++){
+export function arrayAlreadyHasArray(arr, subarr) {
+    for (var i = 0; i < arr.length; i++) {
         let checker = false
-        for(var j = 0; j<arr[i].length; j++){
-            if(arr[i][j] === subarr[j]){
+        for (var j = 0; j < arr[i].length; j++) {
+            if (arr[i][j] === subarr[j]) {
                 checker = true
             } else {
                 checker = false
                 break;
             }
         }
-        if (checker){
+        if (checker) {
             return true
         }
     }
@@ -65,11 +65,11 @@ export function elementWiseMultiplication(twoDimArr1, twoDimArr2) {
     const valid = twoDimArr1.length === twoDimArr2.length;
     let arr = [];
 
-    if(valid) {
-        for(let i=0; i<twoDimArr1.length; i++) {
-            if(twoDimArr1[i].length === twoDimArr2[i].length) {
+    if (valid) {
+        for (let i = 0; i < twoDimArr1.length; i++) {
+            if (twoDimArr1[i].length === twoDimArr2[i].length) {
                 arr[i] = [];
-                for(let j=0; j<twoDimArr1[i].length; j++) {
+                for (let j = 0; j < twoDimArr1[i].length; j++) {
                     const mul = twoDimArr1[i][j] * twoDimArr2[i][j];
                     arr[i][j] = Number(mul.toPrecision(5)); //check
                 }
@@ -85,12 +85,12 @@ export function elementWiseMultiplication(twoDimArr1, twoDimArr2) {
 export function elementWiseMultiplicationWithConstant(twoDimArr1, constant) {
     let arr = [];
 
-    for(let i=0; i<twoDimArr1.length; i++) {
-            arr[i] = [];
-            for(let j=0; j<twoDimArr1[i].length; j++) {
-                const mul = twoDimArr1[i][j] * constant;
-                arr[i][j] = Number(mul.toPrecision(5)); //check
-            }
+    for (let i = 0; i < twoDimArr1.length; i++) {
+        arr[i] = [];
+        for (let j = 0; j < twoDimArr1[i].length; j++) {
+            const mul = twoDimArr1[i][j] * constant;
+            arr[i][j] = Number(mul.toPrecision(5)); //check
+        }
     }
     return arr;
 }
@@ -99,11 +99,11 @@ export function elementWiseAddition(twoDimArr1, twoDimArr2) {
     const valid = twoDimArr1.length === twoDimArr2.length;
     let arr = [];
 
-    if(valid) {
-        for(let i=0; i<twoDimArr1.length; i++) {
-            if(twoDimArr1[i].length === twoDimArr2[i].length) {
+    if (valid) {
+        for (let i = 0; i < twoDimArr1.length; i++) {
+            if (twoDimArr1[i].length === twoDimArr2[i].length) {
                 arr[i] = [];
-                for(let j=0; j<twoDimArr1[i].length; j++) {
+                for (let j = 0; j < twoDimArr1[i].length; j++) {
                     const add = twoDimArr1[i][j] + twoDimArr2[i][j];
                     arr[i][j] = Number(add.toPrecision(5)); //check
                 }
@@ -120,11 +120,11 @@ export function elementWiseSubtraction(twoDimArr1, twoDimArr2) {
     const valid = twoDimArr1.length === twoDimArr2.length;
     let arr = [];
 
-    if(valid) {
-        for(let i=0; i<twoDimArr1.length; i++) {
-            if(twoDimArr1[i].length === twoDimArr2[i].length) {
+    if (valid) {
+        for (let i = 0; i < twoDimArr1.length; i++) {
+            if (twoDimArr1[i].length === twoDimArr2[i].length) {
                 arr[i] = [];
-                for(let j=0; j<twoDimArr1[i].length; j++) {
+                for (let j = 0; j < twoDimArr1[i].length; j++) {
                     const add = twoDimArr1[i][j] - twoDimArr2[i][j];
                     arr[i][j] = Number(add.toPrecision(5)); //check
                 }
@@ -145,6 +145,10 @@ export function _clone(arr) {
     return JSON.parse(JSON.stringify(arr))
 }
 
-export function roundToNDecPlaces(number, N=4) {
-    return Number(Number(number.toPrecision(N+1)).toFixed(N));
+export function roundToNDecPlaces(number, N = 4) {
+    return Number(Number(number.toPrecision(N + 1)).toFixed(N));
+}
+
+export function getMax(a) {
+    return Math.max(...a.map(e => Array.isArray(e) ? getMax(e) : e));
 }

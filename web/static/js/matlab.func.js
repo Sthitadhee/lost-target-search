@@ -113,8 +113,9 @@ export function MotionDecode(motion) {
 }
 
 export async function myCost(position, model) {
-
     if (!checkMotion(position, model)) {
+        Store.path = [];
+        redrawMap(true);
         return 0;
     }
     else {
@@ -129,9 +130,9 @@ export async function myCost(position, model) {
             location.x = path[i][0] + model.xmax + 1;
             location.y = path[i][1] + model.ymax + 1;
             [scaleFactor, Pmap] = UpdateMap(i + 1, model, location, Pmap);
-            await delay(Store.speed)
             Store.currentMap = _clone(Pmap)
             redrawMap();
+            await delay(Store.speed)
             pNoDetection = scaleFactor;
             pDetection[i] = pNoDetectionAtAll * roundToNDecPlaces(1.00000 - pNoDetection); //check
             pNoDetectionAtAll *= pNoDetection;
@@ -163,11 +164,10 @@ function checkMotion(position, model) {
         path[i] = nextNode;
         currentNode = nextNode;
     }
-
-    const withoutDuplicates = Array.from(new Set(path));
-    if (path.length != withoutDuplicates.length) {
-        valid = false;
-    }
+    // const withoutDuplicates = Array.from(new Set(path.map(JSON.stringify)), JSON.parse);
+    // if (path.length != withoutDuplicates.length) {
+    //     valid = false;
+    // }
     return valid
 }
 

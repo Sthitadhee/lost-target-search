@@ -25,6 +25,8 @@ let isRandomInitialisation = true;
 let currentMPSOindex = 0;
 let noMpsoRepeat = 3;
 let currentMpsoRepeatIndex = 0;
+let lastTargetLocation = [];
+let lastMax = 0;
 
 export default {
     path,
@@ -51,5 +53,6 @@ export default {
     noMpsoRepeat,
     currentMpsoRepeatIndex,
     targetDir,
-    // pause
+    lastTargetLocation,
+    lastMax
 }

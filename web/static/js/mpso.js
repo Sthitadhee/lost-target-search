@@ -1,6 +1,6 @@
 import { CreateRandomSolution, myCost, PathFromMotion } from './matlab.func.js';
 import Store from './variable.js'
-import { delay, elementWiseAddition, elementWiseMultiplication, elementWiseMultiplicationWithConstant, elementWiseSubtraction, fixPrecisionIn2D, _clone } from './helper.js';
+import { delay, elementWiseAddition, elementWiseMultiplication, elementWiseMultiplicationWithConstant, elementWiseSubtraction, fixPrecisionIn2D, getMax, _clone } from './helper.js';
 import { drawSideMap, redrawMap, createPath, drawSideInfo } from './map.js';
 
 export async function runMpso(model, e) {
@@ -65,6 +65,8 @@ export async function runMpso(model, e) {
                 cost: particles[i - 1].bestCost,
                 position: _clone(particles[i - 1].bestPosition)
             };
+            Store.lastTargetLocation = _clone(Store.currentMap);
+            Store.lastMax = getMax(Store.currentMap);
         }
         Store.currentGBest = GlobalBest.cost;
         createMiniMap(GlobalBest.position, model);
@@ -73,7 +75,7 @@ export async function runMpso(model, e) {
     Store.currentStatus = 'Random Best particle path';
     drawSideInfo();
     createFinalMap(GlobalBest.position, model);
-    redrawMap(true);
+    redrawMap();
     await delay(5000);
 
     let BestCost = []
@@ -88,7 +90,7 @@ export async function runMpso(model, e) {
         Store.currentMpsoRepeatIndex = it;
 
         for (let i = 0; i < particlePopulation; i++) {
-            Store.currentMPSOindex = i+1;
+            Store.currentMPSOindex = i + 1;
             await delay(500);
             drawSideInfo();
             Store.targetPosition = [Store.meanY - 1, Store.meanX - 1];
@@ -107,6 +109,8 @@ export async function runMpso(model, e) {
                         cost: particles[i].bestCost,
                         position: _clone(particles[i].bestPosition)
                     };
+                    Store.lastTargetLocation = _clone(Store.currentMap);
+                    Store.lastMax = getMax(Store.currentMap);
                 }
             }
             Store.currentGBest = GlobalBest.cost;

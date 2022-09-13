@@ -1,5 +1,5 @@
 import Store from './variable.js'
-import { _clone } from './helper.js';
+import { getMax, _clone } from './helper.js';
 
 // draws the initial main map
 export function drawMap() {
@@ -27,12 +27,25 @@ export function drawMap() {
 }
 
 // redraws the main map when map updates
-export function redrawMap() {
+export function redrawMap(result) {
     let board = document.getElementById("simulationBoard");
     board.innerHTML = undefined;
-    const max = Store.currentMap[Store.targetPosition[0]][Store.targetPosition[1]];
-    const ncol = Store.currentMap[0].length;
-    const nrow = Store.currentMap.length;
+    let max;
+    if(!result) {
+        max = getMax(Store.currentMap);
+    } else {
+        max = Store.lastMax;
+    }
+    console.log(max);
+    let ncol, nrow;
+    if (!result) {
+        ncol = Store.currentMap[0].length;
+        nrow = Store.currentMap.length;
+    } else {
+        ncol = Store.lastTargetLocation[0].length;
+        nrow = Store.lastTargetLocation.length;
+    }
+
     let tableHTML = '';
     let path = Store.path;
     for (let r = 0; r < nrow; r++) {
@@ -49,8 +62,12 @@ export function redrawMap() {
                 path.unshift()
             }
             else {
-                currentHTMLRow += `<td id="s-col ${c}" class="s-col py-0" style="${generateColorBasedOnProb(Store.currentMap[Store.currentMap.length - 1 - r][c], max)}">
-                    </td>`;
+                if(!result) {
+                    currentHTMLRow += `<td id="s-col ${c}" class="s-col py-0" style="${generateColorBasedOnProb(Store.currentMap[Store.currentMap.length - 1 - r][c], max)}"> </td>`;
+                } else {
+                    currentHTMLRow += `<td id="s-col ${c}" class="s-col py-0" style="${generateColorBasedOnProb(Store.lastTargetLocation[Store.lastTargetLocation.length - 1 - r][c], max)}"> </td>`;
+                }
+                   
                 // ${currentMap[currentMap.length - 1 - r][c]}
             }
         }
@@ -78,7 +95,7 @@ export function drawSideMap(cost) {
                 currentHTMLRow += `<td id="s-col ${c}" class="s-col sm py-0 uav"><div class="particle-movement sm"></div></td>`;
             }
             else if (index > -1) {
-                currentHTMLRow += `<td id="s-col ${c}" class="s-col sm py-0"><div class="particle-movement sm">${index+1}</div></td>`;
+                currentHTMLRow += `<td id="s-col ${c}" class="s-col sm py-0"><div class="particle-movement sm">${index + 1}</div></td>`;
                 path.unshift()
             }
             else {
@@ -95,7 +112,7 @@ export function drawSideInfo() {
     let sideInfoDiv = document.getElementById('simulationInfo');
     let info = `<p class="algo-status">${Store.currentStatus}</p>`;
     info += `<p><span class="badge badge-secondary algo-status-details">Step Number</span> = <span class="badge badge-primary algo-status-details">${Store.currentMPSOindex} / ${Store.nParticles}<span/><p/>`
-    if(!Store.isRandomInitialisation) {
+    if (!Store.isRandomInitialisation) {
         info = `<p class="algo-status">Initialising Particles Randomly</p>`;
         info += `<p><span class="badge badge-secondary algo-status-details">Step Number = </span> <span>${Store.nParticles} / ${Store.nParticles}<span/><p/>`
         info += `<p class="algo-status">${Store.currentStatus}</p>`;
@@ -118,7 +135,7 @@ function generateColorBasedOnProb(prob, max) {
 
 export function createPath(mapType, path) {
     let attribute;
-    if(mapType === 'miniMap') {
+    if (mapType === 'miniMap') {
         attribute = 'pathSmMap'
     }
     else {
