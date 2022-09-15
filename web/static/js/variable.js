@@ -28,6 +28,8 @@ let currentMpsoRepeatIndex = 0;
 let lastTargetLocation = [];
 let lastMax = 0;
 
+let resultMap = []
+
 export default {
     path,
     mapSizeX,
@@ -54,5 +56,6 @@ export default {
     currentMpsoRepeatIndex,
     targetDir,
     lastTargetLocation,
-    lastMax
+    lastMax,
+    resultMap
 }

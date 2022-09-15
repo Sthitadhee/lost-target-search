@@ -132,11 +132,6 @@ export async function runMpso(model, e) {
     await delay(1000);
     redrawMap(true);
 
-
-    Store.currentStatus = 'Press VISUALIZE to start again!'
-    drawSideInfo();
-    // graph the results
-
     e.target.disabled = false;
     e.target.classList.remove('bg-success');
 }

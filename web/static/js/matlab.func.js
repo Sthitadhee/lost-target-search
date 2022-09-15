@@ -137,6 +137,9 @@ export async function myCost(position, model) {
             pDetection[i] = pNoDetectionAtAll * roundToNDecPlaces(1.00000 - pNoDetection); //check
             pNoDetectionAtAll *= pNoDetection;
             pNoDetectionAtAll = roundToNDecPlaces(pNoDetectionAtAll);
+            if(!Store.resultMap.length && i === N-1) {
+                Store.resultMap = _clone(Pmap);
+            }
         }
         return roundToNDecPlaces(1.00000 - pNoDetectionAtAll);
     }
@@ -225,7 +228,6 @@ function UpdateMap(index, model, location, map) {
     map = fixPrecisionIn2D(mulMap)
     const scaleFactor = calcSum(map);
     const newMap = normaliseMatrix(map, scaleFactor, Store.targetPosition);
-    // console.log(_clone(map), _clone(pSensorNoDetection), _clone(mulMap), _clone(newMap), scaleFactor)
     return [scaleFactor, newMap];
 }
 

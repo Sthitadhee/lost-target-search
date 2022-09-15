@@ -36,7 +36,6 @@ export function redrawMap(result) {
     } else {
         max = Store.lastMax;
     }
-    console.log(max);
     let ncol, nrow;
     if (!result) {
         ncol = Store.currentMap[0].length;
