@@ -108,7 +108,7 @@ export function drawSideInfo() {
     info += `<p><span class="badge badge-secondary algo-status-details">Step Number</span> = <span class="badge badge-primary algo-status-details">${Store.currentMPSOindex} / ${Store.nParticles}<span/><p/>`
     if (!Store.isRandomInitialisation) {
         info = `<p class="algo-status">Initialising Particles Randomly</p>`;
-        info += `<p><span class="badge badge-secondary algo-status-details">Step Number = </span> <span>${Store.nParticles} / ${Store.nParticles}<span/><p/>`
+        info += `<p><span class="badge badge-secondary algo-status-details">Step Number</span> = <span>${Store.nParticles} / ${Store.nParticles}<span/><p/>`
         info += `<p class="algo-status">${Store.currentStatus}</p>`;
         info += `<p><span class="badge badge-secondary algo-status-details">Step Number</span> = <span class="badge badge-primary algo-status-details">${Store.currentMPSOindex} / ${Store.nParticles}</span> <span class="badge badge-primary"> Repeats = ${Store.currentMpsoRepeatIndex} / ${Store.noMpsoRepeat - 1}</span></p>`
     }

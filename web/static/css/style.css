@@ -38,7 +38,7 @@ h2 {
     color: lightgrey;
 }
 
-.s-col {
+.s-col, .cell-symbol::before {
     width: 15px;
     height: 15px;
     border: 0.1px solid rgba(175, 216, 248, 0.9);
@@ -49,7 +49,7 @@ h2 {
     height: 7.5px;
 }
 
-.uav {
+.uav, .uav-symbol::before {
     background-color: rgba(255, 0, 0, 0.8);
     border-radius: 10%;
     border: 2px solid black;
@@ -59,7 +59,7 @@ h2 {
     min-height: 9vh;
 }
 
-.particle-movement {
+.particle-movement, .path-symbol::before {
     background-color: rgba(0, 255, 255, 0.3);
     font-size: 8px;
     text-align: center;
@@ -106,4 +106,45 @@ label {
 
 .algo-status-details {
     font-size: 0.8rem;
+}
+
+/* --------------------------------- */
+.uav-symbol::before, .path-symbol::before, .target-symbol::before, .cell-symbol::before {
+    content:'';
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 15px;
+}
+
+.path-symbol::before {
+    content: 'R';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.target-symbol::before {
+    background-color: rgba(0, 255, 0, 0.5);
+}
+
+.symbol {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.symbol-header {
+    font-weight: bold;
+}
+
+.point-left::before, .point-right::before {
+    content: '*';
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

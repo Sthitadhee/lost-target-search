@@ -20,9 +20,8 @@ settingsSelectionScene.addEventListener('change', changeScene);
 saveSettingBtn.addEventListener('click', saveSettings);
 let model = {};
 
-// openHelp();
-setTimeout(() => { closeHelp() }, 3000);
 initialiseSimulation();
+openHelp();
 
 function initialiseSimulation() {
     

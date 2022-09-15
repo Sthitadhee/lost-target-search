@@ -146,7 +146,7 @@
         </div>
 
         <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="helpLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title text-warning" id="helpLabel">Info Manual</h5>
@@ -155,10 +155,32 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="uav-symbol">UAV Symbol</div>
-                        <div class="path-symbol">Path Symbol</div>
-                        <div class="target-symbol">Target Symbol</div>
-                        <div class="cell-symbol">Cell Symbol</div>
+                        <div class="mt-2 mb-3 symbol-header">SYMBOLS</div>
+                        <div class="symbol uav-symbol"> UAV Symbol at time t = 0</div>
+                        <div class="symbol path-symbol">Path Symbol with real numbers indicating uav position at t</div>
+                        <div class="symbol target-symbol">Target Symbol</div>
+                        <div class="symbol cell-symbol">Cell Symbol</div>
+                        <div class="mt-4 mb-3 symbol-header">OVERVIEW</div>
+                        <div class="overview-body">When you click the visualize button, you will run the mpso algorithm.
+                            In the settings you can change some of the parameters. Note (0,0) UAV position means the UAV
+                            will appear in the middle of the map. All the other values follow the cartesian graphing
+                            method such as for position of the target decided by the target mean. </div>
+                        <div class="symbol point-left">On the left information zone proides status of the MPSO and
+                            current cost and global best cost.</div>
+                        <div class="symbol point-right">On the right, the mini map will show the best cost and best path
+                            so far</div>
+                        <div class="symbol text-info">Please refer to 10.1016/j.asoc.2020.106705 (Motion-encoded particle swarm optimization for moving target search using
+                            UAVs) for details.</div>
+                        <div class="mt-4 mb-3 symbol-header">TOOLS USED</div>
+                        <div class="">
+                            <span class="badge badge-secondary">JavaScript</span>
+                            <span class="badge badge-secondary">Tensorflow JS</span>
+                            <span class="badge badge-secondary">Python</span>
+                            <span class="badge badge-secondary">Flask</span>
+                            <span class="badge badge-secondary">CSS</span>
+                            <span class="badge badge-secondary">Bootstrap</span>
+                            <span class="badge badge-secondary">Glyph Icon</span>
+                        </div>
                     </div>
                 </div>
             </div>
