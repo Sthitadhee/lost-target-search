@@ -30,19 +30,14 @@ export function drawMap() {
 export function redrawMap(result) {
     let board = document.getElementById("simulationBoard");
     board.innerHTML = undefined;
-    let max;
-    if(!result) {
-        max = getMax(Store.currentMap);
-    } else {
-        max = Store.lastMax;
-    }
+    const max = getMax(Store.currentMap);
     let ncol, nrow;
     if (!result) {
         ncol = Store.currentMap[0].length;
         nrow = Store.currentMap.length;
     } else {
-        ncol = Store.lastTargetLocation[0].length;
-        nrow = Store.lastTargetLocation.length;
+        ncol = Store.resultMap[0].length;
+        nrow = Store.resultMap.length;
     }
 
     let tableHTML = '';
@@ -61,12 +56,12 @@ export function redrawMap(result) {
                 path.unshift()
             }
             else {
-                if(!result) {
+                if (!result) {
                     currentHTMLRow += `<td id="s-col ${c}" class="s-col py-0" style="${generateColorBasedOnProb(Store.currentMap[Store.currentMap.length - 1 - r][c], max)}"> </td>`;
                 } else {
-                    currentHTMLRow += `<td id="s-col ${c}" class="s-col py-0" style="${generateColorBasedOnProb(Store.lastTargetLocation[Store.lastTargetLocation.length - 1 - r][c], max)}"> </td>`;
+                    currentHTMLRow += `<td id="s-col ${c}" class="s-col py-0" style="${generateColorBasedOnProb(Store.resultMap[Store.resultMap.length - 1 - r][c], max)}"> </td>`;
                 }
-                   
+
                 // ${currentMap[currentMap.length - 1 - r][c]}
             }
         }

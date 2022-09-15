@@ -65,8 +65,6 @@ export async function runMpso(model, e) {
                 cost: particles[i - 1].bestCost,
                 position: _clone(particles[i - 1].bestPosition)
             };
-            Store.lastTargetLocation = _clone(Store.currentMap);
-            Store.lastMax = getMax(Store.currentMap);
         }
         Store.currentGBest = GlobalBest.cost;
         createMiniMap(GlobalBest.position, model);
@@ -102,15 +100,13 @@ export async function runMpso(model, e) {
             Store.currentCost = costP;
             if (particles[i].cost > particles[i].bestCost) {
                 particles[i].bestCost = particles[i].cost;
-                particles[i].bestPosition = _clone(particles[i].position); //check for js arry problem
+                particles[i].bestPosition = _clone(particles[i].position);
 
                 if (particles[i].bestCost > GlobalBest.cost) {
                     GlobalBest = {
                         cost: particles[i].bestCost,
                         position: _clone(particles[i].bestPosition)
                     };
-                    Store.lastTargetLocation = _clone(Store.currentMap);
-                    Store.lastMax = getMax(Store.currentMap);
                 }
             }
             Store.currentGBest = GlobalBest.cost;
