@@ -1,3 +1,6 @@
+File Directory Overview
+
+```
 PROJECT OPTIMIZATION TECHNIQUE/
 |-- app/
 |   |-- app.py
@@ -28,3 +31,4 @@ PROJECT OPTIMIZATION TECHNIQUE/
 |-- venv
 |-- README.md
 |-- .gitignore
+```
