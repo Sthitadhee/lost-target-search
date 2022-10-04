@@ -1,8 +1,16 @@
+// the mpso function engine
+
 import { CreateRandomSolution, myCost, PathFromMotion } from './matlab.func.js';
 import Store from './variable.js'
 import { delay, elementWiseAddition, elementWiseMultiplication, elementWiseMultiplicationWithConstant, elementWiseSubtraction, fixPrecisionIn2D, getMax, _clone } from './helper.js';
 import { drawSideMap, redrawMap, createPath, drawSideInfo } from './map.js';
 
+
+/* 
+    runs the mpso algorithm
+    @param {object} model
+    @param {event object} e
+*/
 export async function runMpso(model, e) {
     // ----- set all the parameters -----
 
@@ -132,7 +140,16 @@ export async function runMpso(model, e) {
     e.target.classList.remove('bg-success');
 }
 
-
+/* 
+    calculates the update velocity of Mpso
+    @param {number} w
+    @param {number} c1
+    @param {number} c2
+    @param {object} particle
+    @param {array} rMatrix
+    @param {object} GlobalBest
+    @return {number}
+*/
 function calculatedMpsoUpdatedVelocity(w, c1, c2, particle, rMatrix, GlobalBest) {
     const wVelocity = elementWiseMultiplicationWithConstant(particle.velocity, w);
     const subtractCurrentFromPBestPosition = elementWiseSubtraction(particle.bestPosition, particle.position);
@@ -147,18 +164,33 @@ function calculatedMpsoUpdatedVelocity(w, c1, c2, particle, rMatrix, GlobalBest)
     return velocity;
 }
 
+/* 
+    creates a matrix with random values as elements with fixed precision based on a range matrix
+    @param {array} matrix - range represented by a matrix
+    @return {array}
+*/
 function calculateRandomValues(matrix) {
     const tfMatrix = tf.randomUniform(matrix);
     const arr = Array.from(tfMatrix.arraySync());
     return fixPrecisionIn2D(arr, 5);
 }
 
+/* 
+   creates a minimap
+   @param {array} gBestPos
+   @param {object} model 
+*/
 function createMiniMap(gBestPos, model) {
     const path = PathFromMotion(gBestPos, model);
     createPath('miniMap', path);
 
 }
 
+/* 
+   creates a minimap final one
+   @param {array} gBestPos
+   @param {object} model
+*/
 function createFinalMap(gBestPos, model) {
     const path = PathFromMotion(gBestPos, model)
     createPath('maxMap', path)

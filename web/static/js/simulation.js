@@ -1,3 +1,5 @@
+// the index file for the whole simulation
+
 import { drawMap, drawSideInfo } from './map.js'
 import { runMpso } from './mpso.js'
 import { normaliseMatrix, _clone } from './helper.js'
@@ -23,6 +25,9 @@ let model = {};
 initialiseSimulation();
 openHelp();
 
+/* 
+    initialises the simulation at start point
+*/
 function initialiseSimulation() {
     
     const MAPSIZE_X = Store.mapSizeX;
@@ -55,6 +60,7 @@ function initialiseSimulation() {
 
     fetchMap();
     
+    // fetches the first belief map matrix
     async function fetchMap() {
         // JSON Request
         let fetchJsonRequest = {
@@ -92,7 +98,10 @@ function initialiseSimulation() {
     }
 }
 
-
+/* 
+    starts the running of mpso
+    @param {event object} e
+*/
 function visualiseAlgo(e) {
     // call mpso
     if (Store.algo === 'MPSO') {
@@ -100,30 +109,46 @@ function visualiseAlgo(e) {
     }
 }
 
+/* 
+    opens the help dialog
+*/
 function openHelp() {
     const helpManualTag = document.getElementById('help');
     helpManualTag.style.display = 'initial';
     helpManualTag.style.opacity = 1;
 }
 
+/* 
+    closes the help dialog
+*/
 function closeHelp() {
     const helpManualTag = document.getElementById('help');
     helpManualTag.style.display = 'none';
     helpManualTag.style.opacity = 0;
 }
 
+/* 
+    opens the settings dialog
+*/
 function openSettings() {
     const settingsTag = document.getElementById('settings');
     settingsTag.style.display = 'initial';
     settingsTag.style.opacity = 1;
 }
 
+/* 
+    opens the settings dialog
+*/
 function closeSettings() {
     const settingsTag = document.getElementById('settings');
     settingsTag.style.display = 'none';
     settingsTag.style.opacity = 0;
 }
 
+/* 
+    changes the scene in the settings (not required at the moment)
+    @param {event object} event
+*/
 function changeScene(event) {
     const inputUavPositionX = document.getElementById('UavPositionX');
     const inputUavPositionY = document.getElementById('UavPositionY');
@@ -170,6 +195,9 @@ function changeScene(event) {
     }
 }
 
+/* 
+    saves the changes in the settings dialog
+*/
 function saveSettings() {
     const inputUavPositionX = document.getElementById('UavPositionX').value;
     const inputUavPositionY = document.getElementById('UavPositionY').value;

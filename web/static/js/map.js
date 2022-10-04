@@ -1,7 +1,11 @@
+// all the functions that helps draw in the page
+
 import Store from './variable.js'
 import { getMax, _clone } from './helper.js';
 
-// draws the initial main map
+/* 
+    draws the initial main map
+*/
 export function drawMap() {
     const max = Store.currentMap[Store.targetPosition[0]][Store.targetPosition[1]]; // calculate the max position quickly
     const ncol = Store.currentMap[0].length;
@@ -26,7 +30,10 @@ export function drawMap() {
     board.innerHTML = tableHTML;
 }
 
-// redraws the main map when map updates
+/* 
+    redraws the main map when map updates
+    @param {} result
+*/
 export function redrawMap(result) {
     let board = document.getElementById("simulationBoard");
     board.innerHTML = undefined;
@@ -102,6 +109,7 @@ export function drawSideMap(cost) {
     pTag.innerHTML = `Cost = ${cost}`
 }
 
+// draws the side panel that provide the information about the ongoings of the process
 export function drawSideInfo() {
     let sideInfoDiv = document.getElementById('simulationInfo');
     let info = `<p class="algo-status">${Store.currentStatus}</p>`;
@@ -127,6 +135,11 @@ function generateColorBasedOnProb(prob, max) {
     }
 }
 
+/* 
+    global array is filled up with stringified path in a special way to allow for easy comparison for equality when needed
+    @param {string} mapType
+    @param {array} path
+*/
 export function createPath(mapType, path) {
     let attribute;
     if (mapType === 'miniMap') {

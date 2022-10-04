@@ -1,3 +1,12 @@
+// all the helper functions of the project
+
+/* 
+    Normalise matrix so that sum of element sums to one
+    @param {array} matrix 
+    @param {number} sum 
+    @param {array} mean 
+    @return {array} the normalised matrix
+*/
 export function normaliseMatrix(matrix, sum, mean) {
     matrix = _clone(matrix);
     const ncol = matrix[0].length;
@@ -17,6 +26,11 @@ export function normaliseMatrix(matrix, sum, mean) {
     return matrix;
 }
 
+/* 
+    Calculates the sum of all the elements of a matrix
+    @param {array} matrix 
+    @return {array} the sum of all the elements of matrix
+*/
 export function calcSum(matrix) {
     const ncol = matrix[0].length;
     const nrow = matrix.length;
@@ -31,6 +45,12 @@ export function calcSum(matrix) {
     return sum
 }
 
+/* 
+    fixes the precision of all the elements within the matrix
+    @param {array} matrix 
+    @param {number} precision 
+    @return {array} the matrix with required precision
+*/
 export function fixPrecisionIn2D(matrix, precision = 7) { //check
     const ncol = matrix[0].length;
     const nrow = matrix.length;
@@ -43,6 +63,12 @@ export function fixPrecisionIn2D(matrix, precision = 7) { //check
     return matrix;
 }
 
+/* 
+    checks if elements within an array exists completely within another array
+    @param {array} arr 
+    @param {number} subarr 
+    @return {boolean} 
+*/
 export function arrayAlreadyHasArray(arr, subarr) {
     for (var i = 0; i < arr.length; i++) {
         let checker = false
@@ -61,6 +87,12 @@ export function arrayAlreadyHasArray(arr, subarr) {
     return false
 }
 
+/* 
+    Calculates elementwise multiplication for 2 matrices
+    @param {array} twoDimArr1 
+    @param {array} twoDimArr2 
+    @return {array} 
+*/
 export function elementWiseMultiplication(twoDimArr1, twoDimArr2) {
     const valid = twoDimArr1.length === twoDimArr2.length;
     let arr = [];
@@ -82,6 +114,12 @@ export function elementWiseMultiplication(twoDimArr1, twoDimArr2) {
     throw new Error('Array dimension do not match! elementWiseMultiplication error!');
 }
 
+/* 
+    Calculates elementwise multiplication for 1 matrices with a constant
+    @param {array} twoDimArr1 
+    @param {array} constant 
+    @return {array} 
+*/
 export function elementWiseMultiplicationWithConstant(twoDimArr1, constant) {
     let arr = [];
 
@@ -95,6 +133,12 @@ export function elementWiseMultiplicationWithConstant(twoDimArr1, constant) {
     return arr;
 }
 
+/* 
+    Calculates elementwise addition for 2 matrices
+    @param {array} twoDimArr1 
+    @param {array} twoDimArr2 
+    @return {array} 
+*/
 export function elementWiseAddition(twoDimArr1, twoDimArr2) {
     const valid = twoDimArr1.length === twoDimArr2.length;
     let arr = [];
@@ -116,6 +160,12 @@ export function elementWiseAddition(twoDimArr1, twoDimArr2) {
     throw new Error('Array dimension do not match! elementWiseAddition error!');
 }
 
+/* 
+    Calculates elementwise subtraction for 2 matrices
+    @param {array} twoDimArr1 
+    @param {array} twoDimArr2 
+    @return {array} 
+*/
 export function elementWiseSubtraction(twoDimArr1, twoDimArr2) {
     const valid = twoDimArr1.length === twoDimArr2.length;
     let arr = [];
@@ -137,18 +187,39 @@ export function elementWiseSubtraction(twoDimArr1, twoDimArr2) {
     throw new Error('Array dimension do not match! elementWiseAddition error!');
 }
 
+/* 
+    Creates delay between code execution for allowing varying speed
+    @param {number} ms
+    @return {promise object}
+*/
 export function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+/* 
+    Deep copies an array 
+    @param {array} arr
+    @return {array}
+*/
 export function _clone(arr) {
     return JSON.parse(JSON.stringify(arr))
 }
 
+/* 
+    creates a function to whole precision operation in one line
+    @param {number} number
+    @param {number} N
+    @return {number}
+*/
 export function roundToNDecPlaces(number, N = 4) {
     return Number(Number(number.toPrecision(N + 1)).toFixed(N));
 }
 
-export function getMax(a) {
-    return Math.max(...a.map(e => Array.isArray(e) ? getMax(e) : e));
+/* 
+    calculate the max value in a matrix
+    @param {array} matrix
+    @return {number}
+*/
+export function getMax(matrix) {
+    return Math.max(...matrix.map(e => Array.isArray(e) ? getMax(e) : e));
 }

@@ -3,21 +3,26 @@ import numpy as np
 from scipy.stats import multivariate_normal
 import ast
 
+# provide settings for flask to update the location to template_folder and statis_folder
 app = Flask(__name__, template_folder='../web/templates', static_folder="../web/static")
 
+
+# remove cache from jinja used in flask to see the changes during developement
 def before_request():
     app.jinja_env.cache = {}
 
 app.before_request(before_request)
 
+# home route
 @app.route("/")
 def home():
     return render_template('index.html')
 
+# visualise the first map route
 @app.route("/result", methods=['POST'])
 def createModel():
+    # process the data to obtain as dict form
     data = ast.literal_eval(request.data.decode('utf8').replace("'", '"'))
-
     MAPSIZE_X, MAPSIZE_Y = data['data']['model']['MAPSIZE_X'], data['data']['model']['MAPSIZE_Y']
     mean, covariance = data['data']['target']['mean'], data['data']['target']['covariance']
     

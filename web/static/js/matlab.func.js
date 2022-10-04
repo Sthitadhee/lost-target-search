@@ -1,3 +1,5 @@
+// all the functions from matlab to js
+
 import {
     calcSum,
     fixPrecisionIn2D,
@@ -11,6 +13,11 @@ import {
 import { createPath, redrawMap } from './map.js';
 import Store from './variable.js'
 
+/* 
+    creates a random sequence of positions in motion space of length N
+    @param {object} model
+    @return {array}
+*/
 export function CreateRandomSolution(model) {
     const N = model.n;
     const startNode = [model.xs, model.ys]
@@ -94,6 +101,10 @@ export function CreateRandomSolution(model) {
     return position;
 }
 
+/* converts position to path ~ (-)0.7071 converts to (-)1 
+    @param {2d array} motion
+    @return {1d array} 
+*/
 // converts position to path. quite weird because only (-)0.7071 converts to (-)1 for instance and everything else remains exactly same
 export function MotionDecode(motion) {
     const angle = Math.atan2(motion[1], motion[0]);
@@ -112,6 +123,12 @@ export function MotionDecode(motion) {
     return moveArray[octant];
 }
 
+/* 
+    calculates the cost or cumulative probabilities using the cost function 
+    @param {array} position
+    @param {object} model
+    @return {number} the cost probability
+*/
 export async function myCost(position, model) {
     if (!checkMotion(position, model)) {
         Store.path = [];
@@ -146,7 +163,12 @@ export async function myCost(position, model) {
 
 }
 
-
+/* 
+    checks if the new motion of UAV is valid within the map
+    @param {array} position
+    @param {object} model
+    @return {boolean}
+*/
 function checkMotion(position, model) {
     const N = model.n;
     const xs = model.xs;
@@ -174,6 +196,12 @@ function checkMotion(position, model) {
     return valid
 }
 
+/* 
+    converts motion space to cartesian space
+    @param {array} position
+    @param {object} model
+    @return {array}
+*/
 export function PathFromMotion(position, model) {
     const N = model.n;
     const xs = model.xs;
@@ -204,6 +232,14 @@ export function PathFromMotion(position, model) {
     return path;
 }
 
+/* 
+    updates the map by creating a new path and new target position
+    @param {number} index
+    @param {object} model
+    @param {array} location
+    @param {array} map
+    @return {array}
+*/
 function UpdateMap(index, model, location, map) {
     const MAPSIZE_X = model.MAPSIZE_X;
     const MAPSIZE_Y = model.MAPSIZE_Y;
@@ -231,6 +267,11 @@ function UpdateMap(index, model, location, map) {
     return [scaleFactor, newMap];
 }
 
+/* 
+    converts string direction notation to mathematical values for movement in map
+    @param {string} direction
+    @return {array}
+*/
 export function DirToMove(direction) {
     let move;
     switch (direction) {
@@ -262,6 +303,12 @@ export function DirToMove(direction) {
     return move;
 }
 
+/* 
+    responsible for movement of target 
+    @param {array} map
+    @param {array} movement
+    @return {array}
+*/
 function noncircshift(map, movement) {
     if (movement[0] > 0) {
         for (let i = 0; i < movement[0]; i++) {
@@ -290,16 +337,28 @@ function noncircshift(map, movement) {
     return map;
 }
 
+/* 
+    For moving target up
+    @param {array}
+*/
 function shiftUp(map) {
     map.shift();
     map.push(new Array(map[0].length).fill(0));
 }
 
+/* 
+    For moving target down
+    @param {array}
+*/
 function shiftDown(map) {
     map.pop()
     map.unshift(new Array(map[0].length).fill(0))
 }
 
+/* 
+    For moving target right
+    @param {array}
+*/
 function shiftRight(map) {
     map.forEach(item => {
         item.pop()
@@ -307,6 +366,10 @@ function shiftRight(map) {
     })
 }
 
+/* 
+    For moving target left
+    @param {array}
+*/
 function shiftLeft(map) {
     map.forEach(item => {
         item.shift()

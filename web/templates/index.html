@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Links the html code to the style sheet required for design -->
     <link type="text/css" rel="stylesheet" href="../static/css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Lost Target Search UAV Flight Simulation</title>
@@ -12,6 +13,7 @@
 
 <body>
     <div>
+        <!-- Top Navbar -->
         <nav class="navbar navbar-light bg-dark">
             <span class="navbar-brand mb-0 text-white text-uppercase font-weight-bold">Lost Target Search</span>
             <div class="d-flex">
@@ -27,16 +29,22 @@
         </nav>
     </div>
 
+    <!-- Main body of the project -->
     <section class="main-simulation container-fluid">
         <div class="row mt-0">
             <div class="col-sm">
+                <!-- Main belief map -->
                 <table id='simulationBoard' class="mt-4" />
             </div>
+            <!-- Mini map for the belief map and its cost -->
             <table id="simulationBoardSm" />
             <p id="simulationBoardSmCost"></p>
+            <!-- Simulation Info box for understanding the current step of the mpso process -->
             <div id="simulationInfo" class="bg-light"></div>
         </div>
     </section>
+
+    <!-- Dialog box for Settings icon and settings options -->
     <section>
         <div class="modal fade" id="settings" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -145,6 +153,7 @@
             </div>
         </div>
 
+        <!-- Dialog box for Help icon and help options -->
         <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="helpLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
                 <div class="modal-content">
@@ -188,6 +197,7 @@
     </section>
 
 </body>
+<!-- Scripts that run as the web pages is opened -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
 <script src="{{url_for('static', filename='js/simulation.js')}}" type="module"></script>
 

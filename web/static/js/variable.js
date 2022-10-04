@@ -1,3 +1,5 @@
+// the variable store for the project
+
 let mapSizeX = 40;
 let mapSizeY = 40;
 let meanX = 10;
