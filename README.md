@@ -11,7 +11,7 @@ Create and run a virtual environment
 ```
 python -m venv venv
 source venv/bin/activate (mac)
-source venv/Script/activate (windows)
+source venv/Scripts/activate (windows)
 ```
 
 Install the correct python packages
