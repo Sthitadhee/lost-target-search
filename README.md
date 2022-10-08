@@ -1,4 +1,33 @@
-File Directory Overview
+# Lost Target Search
+
+### Running The Project
+
+Clone the project
+```
+git clone https://github.com/BrianSteel/Lost-Target-Search.git
+```
+
+Create and run a virtual environment
+```
+python -m venv venv
+source venv/bin/activate (mac)
+source venv/Script/activate (windows)
+```
+
+Install the correct python packages
+```
+pip install -r requirement.txt
+```
+
+Run flask
+```
+cd app/
+flask run
+```
+
+
+
+### File Directory Overview
 
 ```
 PROJECT OPTIMIZATION TECHNIQUE/
