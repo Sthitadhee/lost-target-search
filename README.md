@@ -1,10 +1,16 @@
 # Lost Target Search
 
+
+![Lost Target Search In One Glance](./web/static/img/3_panel_together.png?raw=true)
+`
+### Link To Website
+<a href="https://lost-target-search.herokuapp.com" target="_blank" rel="noopener">Go To Lost Target Search!</a>
+
 ### Running The Project
 
 Clone the project
 ```
-git clone https://github.com/BrianSteel/Lost-Target-Search.git
+git clone https://github.com/Sthitadhee/lost-target-search.git
 ```
 
 Create and run a virtual environment
