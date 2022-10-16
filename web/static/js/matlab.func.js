@@ -151,7 +151,7 @@ export async function myCost(position, model) {
             redrawMap();
             await delay(Store.speed)
             pNoDetection = scaleFactor;
-            pDetection[i] = pNoDetectionAtAll * roundToNDecPlaces(1.00000 - pNoDetection); //check
+            pDetection[i] = pNoDetectionAtAll * roundToNDecPlaces(1.00000 - pNoDetection);
             pNoDetectionAtAll *= pNoDetection;
             pNoDetectionAtAll = roundToNDecPlaces(pNoDetectionAtAll);
             if(!Store.resultMap.length && i === N-1) {
