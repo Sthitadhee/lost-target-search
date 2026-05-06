@@ -5,8 +5,8 @@ importlib-metadata==5.0.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
 MarkupSafe==2.1.1
-numpy==1.23.3
+numpy==1.24.4
 python-dotenv==0.21.0
-scipy==1.9.1
+scipy==1.11.4
 Werkzeug==2.2.2
 zipp==3.8.1
