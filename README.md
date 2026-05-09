@@ -1,8 +1,8 @@
 # Lost Target Search
 
 
-![Lost Target Search In One Glance](./web/static/img/3_panel_together.png?raw=true)
-`
+<img src="./web/static/img/3_panel_together.png" alt="Lost Target Search In One Glance" width="70%">
+
 ### Link To Website
 <a href="https://lost-target-search.onrender.com" target="_blank" rel="noopener">Go To Lost Target Search!</a>
 
